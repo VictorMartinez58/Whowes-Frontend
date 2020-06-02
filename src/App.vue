@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <HeaderComponent />
-    <slider />
-    <router-view />
+    <HeaderComponent v-bind:user='user' />
+
+    <router-view v-on:iscoming="gotUser" />
 
     <FooterComponent />
   </div>
@@ -11,14 +11,25 @@
 <script>
 import HeaderComponent from "./components/HeaderComponent.vue";
 import FooterComponent from "./components/FooterComponent.vue";
-import Slider from "./components/Slider.vue";
 
 export default {
   name: "App",
   components: {
     HeaderComponent,
-    FooterComponent,
-    Slider
+    FooterComponent
+  },
+  data(){
+    return {
+      user: {}
+    }
+  },
+  methods: {
+    gotUser(usu){
+      this.user = usu;
+    }
+  },
+  updated(){
+    alert("UPDATED")
   }
 };
 </script>

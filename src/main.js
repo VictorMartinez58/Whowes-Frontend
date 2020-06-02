@@ -9,6 +9,8 @@ import VueSwal from 'vue-swal';
 
 import Login from './components/auth/login.vue';
 import Register from './components/auth/register.vue';
+import Home from './components/Home.vue';
+import ErrorComponent from './components/ErrorComponent.vue';
 
 Vue.config.productionTip = false
 
@@ -18,16 +20,37 @@ Vue.use(VueSwal);
 
 const routes = [
   
+  {path: '/', component: Home},
   {path: '/login', component: Login},
   {path: '/register', component: Register},
+  {path: '/home', component: Home,  meta: {
+    requiresAuth: true
+  }},
+  {path: '*', component: ErrorComponent},
+
 
 ];
 
 const router = new VueRouter({
   routes,
   mode: 'history',
-  base: process.env.BASE_URL,
+ 
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (localStorage.getItem("jwt") == null) {
+      next({
+        path: "/login"
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
 
 
 const base = axios.create({
