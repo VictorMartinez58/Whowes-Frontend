@@ -3,14 +3,14 @@
     'slider-big': home,
     'slider-small': !home,
   }">
-    <h1>{{texto}}</h1>
-    <router-link to="/blog" class="btn-white" v-if="home">Ir al blog</router-link>
+    <h1>{{text}}</h1>
+    <router-link to="/Home" class="btn-white" v-if="btn">Home</router-link>
   </div>
 </template>
 
 <script>
 export default {
   name: "Slider",
-  props: ['texto', 'home']
+  props: ['text', 'subtext', 'home', 'btn']
 };
 </script>

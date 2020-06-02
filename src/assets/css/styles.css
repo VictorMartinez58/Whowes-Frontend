@@ -1,12 +1,7 @@
-
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
+    margin-top: 2%;
+}
+
 
 #logo {
     width: 30%;
@@ -15,48 +10,53 @@
     margin-top: 35px;
 }
 
+#logo span{
+    color: red;
+}
+
 #logo img {
     display: block;
     float: left;
     height: 60px;
-    margin-top: -9px;
+    margin-top: -10px;
     margin-right: 10px;
-    animation: move infinite 3s linear;
+    animation: move infinite 6s linear;
 }
 
 @keyframes move {
     0% {
         transform: scale(1, 1);
+        transform: rotate(0deg);
     }
 
     50% {
-        transform: scale(1.02, 1.02);
+        transform: scale(1.1, 1.1);
     }
 
     55%{
-        transform: scale(0.95, 0.95);
+        transform: scale(0.9, 0.9);
     }
 
     100% {
         transform: scale(1, 1);
+        transform: rotate(180deg);
     }
 }
 
 #slider{
     width: 100%;
     height: 350px;
-    /*line-height: 320px;*/
     color: white;
     text-shadow: 0px 0px 5px #444;
 
     /*DEGRADADO CSS*/   
     background: rgba(119,194,81,1);
-    background: -moz-radial-gradient(center, ellipse cover, rgba(119,194,81,1) 0%, rgba(8,145,42,1) 100%);
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(119,194,81,1)), color-stop(100%, rgba(8,145,42,1)));
-    background: -webkit-radial-gradient(center, ellipse cover, rgba(119,194,81,1) 0%, rgba(8,145,42,1) 100%);
-    background: -o-radial-gradient(center, ellipse cover, rgba(119,194,81,1) 0%, rgba(8,145,42,1) 100%);
-    background: -ms-radial-gradient(center, ellipse cover, rgba(119,194,81,1) 0%, rgba(8,145,42,1) 100%);
-    background: radial-gradient(ellipse at center, rgba(119,194,81,1) 0%, rgba(8,145,42,1) 100%);
+    background: -moz-radial-gradient(center, ellipse cover, rgb(81, 183, 194) 0%, rgb(8, 138, 145) 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgb(81, 194, 187)), color-stop(100%, rgba(8,145,42,1)));
+    background: -webkit-radial-gradient(center, ellipse cover, rgb(81, 194, 187) 0%, rgb(8, 42, 145) 100%);
+    background: -o-radial-gradient(center, ellipse cover, rgb(81, 192, 194) 0%, rgb(8, 26, 145) 100%);
+    background: -ms-radial-gradient(center, ellipse cover, rgb(81, 194, 187) 0%, rgb(8, 31, 145) 100%);
+    background: radial-gradient(ellipse at center, rgb(81, 173, 194) 0%, rgb(8, 31, 145) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#77c251', endColorstr='#08912a', GradientType=1 );
 
 
@@ -77,6 +77,45 @@
     margin-top: 0.2px;
     padding: 0px;
     padding-top: 53px;
+}
+
+.btn{
+    display: block;
+    background: black;
+    color: white;
+    padding: 15px; 
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    text-decoration: none;
+    max-width: 120px;
+    transition: 300ms all;
+    border: none;
+    cursor:pointer;
+ }
+
+.btn-white{
+    display: block;
+    background: white;
+    color:rgb(88, 88, 88);
+    padding: 10px;
+    width: 100px;
+    height: 35px;
+    margin: 0px auto;
+    font-size: 18px;
+    text-transform: uppercase;
+    text-shadow: none;
+    text-decoration: none;
+    line-height: 35px;
+    box-shadow: 0px 0px 5px rgb(88, 88, 88);
+    margin-top: 40px;
+    border-radius: 4px;
+    transition: 300ms all;
+}
+
+.btn:hover{
+    background: rgb(30, 75, 238);
+    color:white;
 }
 
 .center{
@@ -114,23 +153,25 @@
 #menu a:hover,
 #menu .active
 {
-    color: #08cc67;
+    color: #0860cc;
 }
 
 
 
 
 #footer{
-    background: #f7f7f7;
+    background: #c4e8f0;
     width: 100%;
     height: 70px;
     line-height: 70px;
     color: #444;
+    margin-top: 2vh;
 }
 
 #footer p {
-    margin: 0px;
-    padding: 0px;
+    text-align: center;
+    width: 75%;
+    margin: 0px auto;
 }
 
 
