@@ -65,6 +65,8 @@ export default {
         localStorage.setItem("jwt", token);
         if (token) {
           this.$swal("Success", "Login Successful", "success");
+          this.getUserDetails();
+          this.sendUserToFather(this.user);
           this.$router.push("/home");
         }
       } catch (err) {
@@ -81,9 +83,9 @@ export default {
       this.$emit('iscoming', usu);
     },
     },
-    destroyed() {
-      /* when the login component leaves it saves the jwt and sends an event to the App.vue with the current user logged*/
-      this.getUserDetails();
+    created(){
+      localStorage.removeItem("jwt");
+      this.user = false;
       this.sendUserToFather(this.user);
     }
   }

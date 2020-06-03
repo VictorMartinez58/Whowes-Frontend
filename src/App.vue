@@ -12,6 +12,8 @@
 <script>
 import HeaderComponent from "./components/HeaderComponent.vue";
 import FooterComponent from "./components/FooterComponent.vue";
+import VueJwtDecode from "vue-jwt-decode";
+
 
 export default {
   name: "App",
@@ -41,10 +43,22 @@ export default {
       } else {
         this.isLogged = false;
       }
+    },
+    preventLoseUserOnRefresh(){
+       try{
+        let token = localStorage.getItem("jwt");
+        let decoded = VueJwtDecode.decode(token);
+        this.user = decoded;
+
+        this.isLogged = true;
+
+      } catch(err){
+        this.isLogged = false;
+      }
     }
   },
   created(){
-    this.checkUser();
+   this.preventLoseUserOnRefresh();
   },
   updated() {
     this.checkUser();
