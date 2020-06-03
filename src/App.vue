@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-    <HeaderComponent v-bind:isLogged='isLogged' v-bind:user='user' v-on:logout="logUserOut" />
+    <HeaderComponent v-bind:isLogged="isLogged" v-bind:user="user" v-on:logout="logUserOut" />
 
-    <router-view v-on:iscoming="gotUser" v-bind:user='user' />
+    <router-view v-on:iscoming="gotUser" v-bind:user="user" />
+    
 
     <FooterComponent />
   </div>
@@ -18,27 +19,35 @@ export default {
     HeaderComponent,
     FooterComponent
   },
-  data(){
+  data() {
     return {
       user: {},
-      isLogged: false,
-    }
+      isLogged: false
+    };
   },
   methods: {
+    /* get user from Login component */
     gotUser(usu){
       this.user = usu;
     },
-    logUserOut(){
-       localStorage.removeItem("jwt");
-       this.user = null;
+    /* get event from header component*/
+    logUserOut() {
+      localStorage.removeItem("jwt");
+      this.user = false;
     },
-  },
-  updated(){
-    if (this.user != null){
-      this.isLogged = true;
-    } else {
-      this.isLogged = false;
+    checkUser() {
+      if (this.user && this.user != false) {
+        this.isLogged = true;
+      } else {
+        this.isLogged = false;
+      }
     }
+  },
+  created(){
+    this.checkUser();
+  },
+  updated() {
+    this.checkUser();
   }
 };
 </script>

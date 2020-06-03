@@ -18,33 +18,23 @@
 </template>
 
 <script>
-import VueJwtDecode from "vue-jwt-decode";
+
 import Slider from "./Slider";
 
 export default {
   name: "Home",
-  props: ["senduser"],
+  props: ['user'],
+  
   components: {
       Slider
   },
   data() {
     return {
-      user: {}
+     
     };
   },
   methods: {
-    getUserDetails() {
-      let token = localStorage.getItem("jwt");
-      let decoded = VueJwtDecode.decode(token);
-      this.user = decoded;
-    },
-    sendUserToFather(usu){
-      this.$emit('iscoming', usu);
-    },
-  },
-  created() {
-    this.getUserDetails();
-    this.sendUserToFather(this.user);
+
   }
 };
 </script>

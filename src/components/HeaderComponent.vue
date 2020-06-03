@@ -4,7 +4,8 @@
       <!-- LOGO -->
       <div id="logo">
         <img src="../assets/images/logo.png" class="app-logo" alt="Logotipo" />
-        <strong>Wh</strong><span>O</span>wes
+        <strong>Wh</strong>
+        <span>O</span>wes
       </div>
 
       <!-- MENU -->
@@ -39,15 +40,14 @@
 <script>
 export default {
   name: "HeaderComponent",
-  props: ['isLogged','user'],
+  props: ["isLogged", "user"],
   data() {
-    return {
-     
-    }
+    return {};
   },
   methods: {
+    /* Creates an event to logout from the father component */
     emitLogUserOut() {
-      this.$emit('logout');
+      this.$emit("logout");
     }
   }
 };
