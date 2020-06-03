@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <HeaderComponent v-bind:user='user' />
+    <HeaderComponent v-bind:isLogged='isLogged' v-bind:user='user' v-on:logout="logUserOut" />
 
-    <router-view v-on:iscoming="gotUser" />
+    <router-view v-on:iscoming="gotUser" v-bind:user='user' />
 
     <FooterComponent />
   </div>
@@ -20,16 +20,25 @@ export default {
   },
   data(){
     return {
-      user: {}
+      user: {},
+      isLogged: false,
     }
   },
   methods: {
     gotUser(usu){
       this.user = usu;
-    }
+    },
+    logUserOut(){
+       localStorage.removeItem("jwt");
+       this.user = null;
+    },
   },
   updated(){
-    alert("UPDATED")
+    if (this.user != null){
+      this.isLogged = true;
+    } else {
+      this.isLogged = false;
+    }
   }
 };
 </script>

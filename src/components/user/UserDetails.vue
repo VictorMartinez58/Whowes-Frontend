@@ -1,7 +1,6 @@
 <template>
-  <div>
-      <Slider text="Home" />
-    
+  <div v-if="user">
+    <Slider v-bind:text='"Welcome "+ user.name' />
     <section>
       <div class="container mt-5">
         <div class="row">
@@ -18,34 +17,19 @@
 </template>
 
 <script>
-import VueJwtDecode from "vue-jwt-decode";
-import Slider from "./Slider";
+import Slider from "../Slider";
 
 export default {
-  name: "Home",
-  props: ["senduser"],
+  name: "UserDetails",
+  props: ["user"],
   components: {
-      Slider
+    Slider
   },
   data() {
     return {
-      user: {}
+      
     };
   },
-  methods: {
-    getUserDetails() {
-      let token = localStorage.getItem("jwt");
-      let decoded = VueJwtDecode.decode(token);
-      this.user = decoded;
-    },
-    sendUserToFather(usu){
-      this.$emit('iscoming', usu);
-    },
-  },
-  created() {
-    this.getUserDetails();
-    this.sendUserToFather(this.user);
-  }
 };
 </script>
 <style scoped></style>

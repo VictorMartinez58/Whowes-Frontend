@@ -130,15 +130,14 @@
 }
 
 #menu ul{
-    line-height: 85px;
-    width: 60%;
+    line-height: 125px;
+    width: 50%;
     float:right;
 }
 
 #menu ul li{
     display: inline-block;
     list-style: none;
-    height: 46px;
     margin-left: 15px;
     margin-right: 15px;
 }

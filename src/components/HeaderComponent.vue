@@ -19,11 +19,11 @@
           </li>
           <template v-else>
             <li>
-              <router-link to="/Login" active-class="active">{{user.name}}</router-link>
+              <router-link to="/user-details" v-if="user" active-class="active">{{user.name}}</router-link>
             </li>
             <li>
               <router-link to="/login">
-                <span @click="logUserOut">Logout</span>
+                <span @click="emitLogUserOut">Logout</span>
               </router-link>
             </li>
           </template>
@@ -39,25 +39,15 @@
 <script>
 export default {
   name: "HeaderComponent",
-  props: ['user'],
+  props: ['isLogged','user'],
   data() {
     return {
-      isLogged: null
+     
     }
   },
   methods: {
-    logUserOut() {
-      localStorage.removeItem("jwt");
-      this.isLogged=false;
-      this.user = null;
-    }
-  },
-  mounted(){
-    if (this.user){
-      alert(this.user);
-      this.isLogged = true;
-    } else {
-      alert("no hay usuario")
+    emitLogUserOut() {
+      this.$emit('logout');
     }
   }
 };
