@@ -4,7 +4,8 @@
 
     <router-view v-on:iscoming="gotUser" v-bind:user="user" />
     
-
+    
+    <div class="clearfixmargin"></div>
     <FooterComponent />
   </div>
 </template>

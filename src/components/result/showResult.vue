@@ -4,15 +4,33 @@
 
     <section>
       <div class="container mt-5">
-        <h6>{{result.totalPrice }}</h6>
-        <ul>
-          <li v-for="(x,i) in result.products" :key="i">{{ x }}</li>
-        </ul>
+        <table class="alert alert-secondary table-striped rounded showResults">
+          <thead class="alert-primary">
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>to Pay Between</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(x,i) in productsArray" :key="i">
+              <td>{{ x.name }}</td>
+              <td>{{ x.price }}€</td>
+              <td>
+                <ul type="none">
+                  <li v-for=" (z,i) in x.toPayBetween" :key="i">{{ z }}</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-        <ul>
-          <li v-for="(x,i) in aux" :key="i">{{ x.name }}, con valor de {{ x.price }}€ a pagar entre <strong v-for=" (z,i) in x.toPayBetween" :key="i">  {{ z }}  </strong> </li>
-        </ul>
-
+        <div class="alert alert-primary">
+          <h6>Total Price: {{ result.totalPrice }} €</h6>
+          <ul class="px-5">
+            <li v-for="(x,i) in usersArray" :key="i">{{ x.name }} {{ x.amountToPay }} €</li>
+          </ul>
+        </div>
       </div>
     </section>
   </div>
@@ -37,7 +55,8 @@ export default {
     return {
       url: Global.url,
       result: [],
-      aux: []
+      productsArray: [],
+      usersArray: []
     };
   },
   methods: {
@@ -50,39 +69,21 @@ export default {
           if (res.data.status == "success") {
             this.result = res.data.result;
 
-        this.result.products.forEach(x => {
-          this.aux.push(JSON.parse(x));
-        });
+            this.result.products.forEach(x => {
+              this.productsArray.push(JSON.parse(x));
+            });
 
+            this.result.users.forEach(x => {
+              this.usersArray.push(JSON.parse(x));
+            });
           }
         });
-    },
-    parseProducts() {
-      //TODO
-        var testigo = false;
-      do {
-
-      
-      if (this.result.length > 0) {
-          testigo = true;
-        this.aux = [];
-        this.result.products.forEach(x => {
-          this.aux.push(JSON.parse(x));
-        });
-        console.log(this.aux);
-        console.log(this.result);
-      } 
-      } while(testigo)
-
-      
     }
   },
   created() {
     var id = this.$route.params.id;
     this.getResult(id);
   },
-  mounted() {
-    this.parseProducts();
-  }
+  mounted() {}
 };
 </script>

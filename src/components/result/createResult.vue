@@ -69,7 +69,7 @@
           </ul>
         </div>
       </template>
-      <button class="btn btn-danger" @click="reset">RESET</button>
+      <button class="btn btn-danger" @click.prevent="reset">RESET</button>
       <input type="submit" value="Save" class="btn btn-primary" />
     </form>
 
@@ -91,13 +91,14 @@ export default {
   props: ["user"],
   data() {
     return {
-      resultToSave: new Result("", "", "", []),
+      resultToSave: new Result("", "", "", [], []),
 
       url: Global.url,
 
       users: [],
       products: [],
       productsStringified: [],
+      usersStringified: [],
 
       newName: "",
       newProduct: "",
@@ -125,7 +126,7 @@ export default {
         toPayBetween: save
       });
       this.getAmountEachUser();
-      this.stringifyProducts();
+      this.stringifyArrays();
     },
     restrictBtn() {
       if (
@@ -178,21 +179,25 @@ export default {
       });
       this.totalPrice = total;
     },
-    stringifyProducts() {
+    stringifyArrays() {
       this.productsStringified = [];
+      this.usersStringified = [];
 
       this.products.forEach(x => {
         this.productsStringified.push(JSON.stringify(x));
       });
+      
+      this.users.forEach(x => {
+        this.usersStringified.push(JSON.stringify(x));
+      });
 
-      /* this.productsStringified.forEach(x => {
-        this.jsonParsing.push(JSON.parse(x));
-      }); */
+      
     },
     save() {
       this.resultToSave.user_id = this.user._id;
       this.resultToSave.totalPrice = this.totalPrice;
       this.resultToSave.products = this.productsStringified;
+      this.resultToSave.users = this.usersStringified;
 
       axios
         .post(this.url + "result/save", this.resultToSave, {
@@ -203,7 +208,7 @@ export default {
             this.$swal(
           "Success",
           "Created Successfully",
-          "Success"
+          "success"
         );
           }
         })
