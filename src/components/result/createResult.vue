@@ -1,102 +1,110 @@
 <template>
   <div>
     <Slider text="Create" />
+    <div class="container mt-3">
+      <router-link to="/home" class="btn btn-primary">🠘</router-link>
 
-    <form class="container mt-5 mb-5 form-group alert-dark border border-primary p-2 rounded" v-on:submit.prevent="save()">
-      <h2>
-        Set Title:
-        <input
-          type="text"
-          v-model="resultToSave.title"
-          v-on:keydown.enter.prevent
-          required
-        />
-      </h2>
+      <form
+        class="container mt-3 mb-5 form-group alert-dark border border-primary p-2 rounded"
+        v-on:submit.prevent="save()"
+      >
+        <h2>
+          Set Title:
+          <input
+            type="text"
+            v-model="resultToSave.title"
+            v-on:keydown.enter.prevent
+            required
+          />
+        </h2>
 
-      <div class="container mt-5 mb-5">
-        <p>
-          Add Users:
-          <input type="text" v-model="newName" v-on:keydown.enter.prevent="addUser" />
-          <button class="alert-primary" @click.prevent="addUser">+</button>
-        </p>
-      </div>
-
-      <!-- ADD PRODUCTS -->
-      <template v-if="users.length > 0">
-        <div class="alert alert-success container mt-5">
-          Add Product:
-          <input v-on:keydown.enter.prevent type="text" v-model="newProduct" />
-          <input v-on:keydown.enter.prevent type="number" v-model="newPrice" />
- €
-          <ul>
-            <p>To Pay between:</p>
-            <li v-for="(x,i) in users" :key="i">
-              <input
-                v-model="topay"
-                v-bind:value="x.name"
-                type="checkbox"
-                v-on:keydown.enter.prevent
-              />
-              {{ x.name }}
-              <button
-                v-on:click.prevent="removeUser(i)"
-                class="alert-danger rounded"
-              >🗑️</button>
-            </li>
-          </ul>
-          <button class="btn alert-primary" @click.prevent="addProduct" v-bind:disabled="!restrictBtn()">Add Product</button>
+        <div class="container mt-5 mb-5">
+          <p>
+            Add Users:
+            <input type="text" v-model="newName" v-on:keydown.enter.prevent="addUser" />
+            <button class="alert-primary" @click.prevent="addUser">+</button>
+          </p>
         </div>
-      </template>
 
-      <template v-else>
-        <h6>Please add some users before adding products</h6>
-      </template>
+        <!-- ADD PRODUCTS -->
+        <template v-if="users.length > 0">
+          <div class="alert alert-success container mt-5">
+            Add Product:
+            <input v-on:keydown.enter.prevent type="text" v-model="newProduct" />
+            <input v-on:keydown.enter.prevent type="number" v-model="newPrice" />
+            €
+            <ul>
+              <p>To Pay between:</p>
+              <li v-for="(x,i) in users" :key="i">
+                <input
+                  v-model="topay"
+                  v-bind:value="x.name"
+                  type="checkbox"
+                  v-on:keydown.enter.prevent
+                />
+                {{ x.name }}
+                <button
+                  v-on:click.prevent="removeUser(i)"
+                  class="alert-danger rounded"
+                >🗑️</button>
+              </li>
+            </ul>
+            <button
+              class="btn alert-primary"
+              @click.prevent="addProduct"
+              v-bind:disabled="!restrictBtn()"
+            >Add Product</button>
+          </div>
+        </template>
 
-      <template v-if="products.length > 0">
-        <table class="alert alert-secondary table-striped rounded showResults">
-          <thead class="alert-primary">
-            <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>to Pay Between</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(x,i) in products" :key="i">
-              <td>{{ x.name }}</td>
-              <td>{{ x.price }}€</td>
-              <td>
-                <ul type="none">
-                  <li v-for=" (z,i) in x.toPayBetween" :key="i">{{ z }}</li>
-                </ul>
-              </td>
-              <td>
-                <button v-on:click.prevent="removeProduct(i)" class="alert-danger rounded">🗑️</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <template v-else>
+          <h6>Please add some users before adding products</h6>
+        </template>
 
-        
-      </template>
+        <template v-if="products.length > 0">
+          <table class="alert alert-secondary table-striped rounded showResults">
+            <thead class="alert-primary">
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>to Pay Between</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(x,i) in products" :key="i">
+                <td>{{ x.name }}</td>
+                <td>{{ x.price }}€</td>
+                <td>
+                  <ul type="none">
+                    <li v-for=" (z,i) in x.toPayBetween" :key="i">{{ z }}</li>
+                  </ul>
+                </td>
+                <td>
+                  <button v-on:click.prevent="removeProduct(i)" class="alert-danger rounded">🗑️</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
 
-      <template v-if="products.length > 0">
-        <div class="alert alert-primary">
-          <h6>Result List:</h6>
-          <ul>
-            <li>
-              <h6>Total Price {{ totalPrice }} €</h6>
-            </li>
-            <li v-for="(x,i) in users" :key="i">{{ x.name }} {{ x.amountToPay }}€</li>
-          </ul>
+        <template v-if="products.length > 0">
+          <div class="alert alert-primary">
+            <h6>Result List:</h6>
+            <ul>
+              <li>
+                <h6>Total Price {{ totalPrice }} €</h6>
+              </li>
+              <li v-for="(x,i) in users" :key="i">{{ x.name }} {{ x.amountToPay }}€</li>
+            </ul>
+          </div>
+        </template>
+        <div class>
+          <button class="btn btn-danger" @click.prevent="reset">RESET</button>
+          <input type="submit" value="SAVE" class="btn btn-primary floatingright" />
         </div>
-      </template>
-      <div class>
-        <button class="btn btn-danger" @click.prevent="reset">RESET</button>
-        <input type="submit" value="SAVE" class="btn btn-primary floatingright" />
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 

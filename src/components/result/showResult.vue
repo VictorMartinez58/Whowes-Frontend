@@ -3,8 +3,10 @@
     <Slider :text="result.title" />
 
     <section>
-      <div class="container mt-5">
-        <table class="alert alert-secondary table-striped rounded showResults">
+      <div class="container mt-3">
+        <router-link to="/home" class="btn btn-primary">🠘</router-link>
+
+        <table class="alert alert-secondary table-striped rounded showResults mt-3">
           <thead class="alert-primary">
             <tr>
               <th>Product</th>
@@ -32,8 +34,11 @@
           </ul>
         </div>
       </div>
-
-      <button class="btn bg-danger floatingright" @click="deleteResult(iid)">DELETE</button>
+      <div class="floatingright">
+        <button v-if="result.closed" class="btn bg-success" @click="setClosed(iid, false)">OPEN</button>
+        <button v-else class="btn bg-success" @click="setClosed(iid, true)">CLOSE</button>
+        <button class="btn bg-danger" @click="deleteResult(iid)">DELETE</button>
+      </div>
     </section>
   </div>
 </template>
@@ -107,6 +112,28 @@ export default {
           this.$swal("Operation Canceled");
         }
       });
+    },
+
+    setClosed(id, close) {
+      var string = "Opened";
+      if (close) {
+        string = "Closed";
+      }
+
+      axios
+        .put(
+          this.url + "result/result-close/" + id,
+          { closed: close },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("jwt")
+            }
+          }
+        )
+        .then(() => {
+          this.$swal("Success", string + " Successfully", "success");
+          this.$router.push("/home");
+        });
     }
   },
 

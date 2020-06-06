@@ -16,7 +16,11 @@
           <li
             v-for="(x,i) in results"
             :key="i"
-            class="border border-primary alert-danger rounded p-3 m-3 text-center"
+            class="border border-primary rounded p-3 m-3 text-center"
+            :class="{
+              'alert-danger': x.closed == true,
+              'alert-success': x.closed != true,
+            }"
           >
             <router-link :to="{name: 'show', params: { id: x._id }}">
               <div>
