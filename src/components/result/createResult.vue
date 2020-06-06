@@ -5,7 +5,12 @@
     <form class="container mt-5" v-on:submit.prevent="save()">
       <h2>
         Set Title:
-        <input type="text" v-model="resultToSave.title" v-on:keydown.enter.prevent />
+        <input
+          type="text"
+          v-model="resultToSave.title"
+          v-on:keydown.enter.prevent
+          required
+        />
       </h2>
 
       <p>
@@ -52,7 +57,10 @@
           <ul>
             <li v-for="(x,i) in products" :key="i">
               {{ x.name }} {{ x.price }} {{ x.toPayBetween }}
-              <button v-on:click.prevent="removeProduct(i)" class="btn-danger">🗑️</button>
+              <button
+                v-on:click.prevent="removeProduct(i)"
+                class="btn-danger"
+              >🗑️</button>
             </li>
           </ul>
         </div>
@@ -72,14 +80,12 @@
       <button class="btn btn-danger" @click.prevent="reset">RESET</button>
       <input type="submit" value="Save" class="btn btn-primary" />
     </form>
-
   </div>
 </template>
 
 <script>
 import Slider from "../Slider";
-import axios from "axios"; /* 
-import {required} from 'vuelidate'; */
+import axios from "axios";
 import Global from "../../Global";
 import Result from "../../models/Result";
 
@@ -104,15 +110,30 @@ export default {
       newProduct: "",
       newPrice: 0,
       totalPrice: 0,
-      topay: []
+      topay: [],
+      submitted: false,
+      ableToSave: false,
+      firstTime: true
     };
   },
   methods: {
     reset() {
-      if (confirm("Are you sure to reset the form??")) {
-        this.users = [];
-        this.products = [];
-      }
+      this.$swal({
+        title: "Are you sure to Reset?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+      }).then(willDelete => {
+        if (willDelete) {
+          this.users = [];
+          this.products = [];
+          this.$swal("Reset Successfully!", {
+            icon: "success"
+          });
+        } else {
+          this.$swal("operation cancelled!");
+        }
+      });
     },
     addUser() {
       this.users.push({ name: this.newName, amountToPay: 0 });
@@ -139,22 +160,47 @@ export default {
     },
     removeUser(i) {
       if (!this.topay.includes(this.users[i].name)) {
-        if (confirm("Are you sure to delete the user?")) {
-          this.users.splice(i, 1);
-        }
+        this.$swal({
+          title: "Are you sure?",
+          text: "Deleting an user will delete all the products",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true
+        }).then(willDelete => {
+          if (willDelete) {
+            this.users.splice(i, 1);
+            this.products = [];
+
+            this.$swal("Product Removed Successfully!", {
+              icon: "success"
+            });
+          } else {
+            this.$swal("Operation Cancelled!");
+          }
+        });
       } else {
-        this.$swal(
-          "Error",
-          "Please, Uncheck the user before delete",
-          "error"
-        );
+        this.$swal("Error", "Please, Uncheck the user before delete", "error");
       }
     },
     removeProduct(i) {
-      if (confirm("Are you sure to delete this product?")) {
-        this.products.splice(i, 1);
-        this.getAmountEachUser();
-      }
+      this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this product!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+      }).then(willDelete => {
+        if (willDelete) {
+          this.products.splice(i, 1);
+          this.getAmountEachUser();
+
+          this.$swal("Product Removed Successfully!", {
+            icon: "success"
+          });
+        } else {
+          this.$swal("Operation Cancelled!");
+        }
+      });
     },
     clearAmountEachUser() {
       this.users.forEach(x => {
@@ -178,6 +224,12 @@ export default {
         });
       });
       this.totalPrice = total;
+
+      if (this.products.length > 0) {
+        this.ableToSave = true;
+      } else {
+        this.ableToSave = false;
+      }
     },
     stringifyArrays() {
       this.productsStringified = [];
@@ -186,39 +238,37 @@ export default {
       this.products.forEach(x => {
         this.productsStringified.push(JSON.stringify(x));
       });
-      
+
       this.users.forEach(x => {
         this.usersStringified.push(JSON.stringify(x));
       });
-
-      
     },
     save() {
-      this.resultToSave.user_id = this.user._id;
-      this.resultToSave.totalPrice = this.totalPrice;
-      this.resultToSave.products = this.productsStringified;
-      this.resultToSave.users = this.usersStringified;
+      if (this.ableToSave) {
+        this.getAmountEachUser();
 
-      axios
-        .post(this.url + "result/save", this.resultToSave, {
-          headers: { Authorization: "Bearer " + localStorage.getItem("jwt") }
-        })
-        .then(response => {
-          if (response.data.status == "success") {
-            this.$swal(
-          "Success",
-          "Created Successfully",
-          "success"
-        );
-          }
-        })
-        .catch(error => {
-         this.$swal(
-          "Error",
-          "Something went wrong",
-          error
-        );
-        });
+        this.resultToSave.user_id = this.user._id;
+        this.resultToSave.totalPrice = this.totalPrice;
+        this.resultToSave.products = this.productsStringified;
+        this.resultToSave.users = this.usersStringified;
+
+        axios
+          .post(this.url + "result/save", this.resultToSave, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("jwt")
+            }
+          })
+          .then(response => {
+            if (response.data.status == "success") {
+              this.$swal("Success", "Created Successfully", "success");
+            }
+          })
+          .catch(error => {
+            this.$swal("Error", "Something went wrong", error);
+          });
+      } else {
+        this.$swal("Error", "Need at least one product to save", "error");
+      }
     }
   },
   computed: {},

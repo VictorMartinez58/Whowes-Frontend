@@ -32,6 +32,8 @@
           </ul>
         </div>
       </div>
+
+      <button class="btn bg-danger floatingright" @click="deleteResult(iid)">DELETE</button>
     </section>
   </div>
 </template>
@@ -56,7 +58,8 @@ export default {
       url: Global.url,
       result: [],
       productsArray: [],
-      usersArray: []
+      usersArray: [],
+      iid: this.$route.params.id
     };
   },
   methods: {
@@ -78,11 +81,37 @@ export default {
             });
           }
         });
+    },
+
+    deleteResult(id) {
+      this.$swal({
+        title: "Are you sure?",
+        text:
+          "Once deleted, you will not be able to recover this imaginary file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+      }).then(willDelete => {
+        if (willDelete) {
+          axios
+            .delete(this.url + "result/result/" + id, {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("jwt")
+              }
+            })
+            .then(() => {
+              this.$swal("Success", "Deleted Successfully", "success");
+              this.$router.push("/home");
+            });
+        } else {
+          this.$swal("Operation Canceled");
+        }
+      });
     }
   },
+
   created() {
-    var id = this.$route.params.id;
-    this.getResult(id);
+    this.getResult(this.iid);
   },
   mounted() {}
 };

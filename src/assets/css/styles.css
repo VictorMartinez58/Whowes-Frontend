@@ -117,6 +117,9 @@
     color: #0860cc;
 }
 
+.adapt {
+    font-size: 3vw;
+}
 
 .clearfix{
     clear:both;
@@ -129,6 +132,11 @@
     margin-bottom: 100px;
 }
 
+
+.floatingright {
+    margin-right: 20vw;
+    float: right;
+}
 
 #footer{
     position: fixed;
