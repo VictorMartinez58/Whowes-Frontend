@@ -135,7 +135,12 @@
 
 .floatingright {
     margin-right: 20vw;
+    margin-bottom: -3vh;
     float: right;
+}
+
+input[type=number]{
+    width: 9vw;
 }
 
 #footer{

@@ -2,7 +2,7 @@
   <div>
     <Slider text="Create" />
 
-    <form class="container mt-5" v-on:submit.prevent="save()">
+    <form class="container mt-5 mb-5 form-group alert-dark border border-primary p-2 rounded" v-on:submit.prevent="save()">
       <h2>
         Set Title:
         <input
@@ -13,22 +13,23 @@
         />
       </h2>
 
-      <p>
-        Add Users:
-        <input type="text" v-model="newName" v-on:keydown.enter.prevent="addUser" />
-        <button @click.prevent="addUser">+</button>
-      </p>
+      <div class="container mt-5 mb-5">
+        <p>
+          Add Users:
+          <input type="text" v-model="newName" v-on:keydown.enter.prevent="addUser" />
+          <button class="alert-primary" @click.prevent="addUser">+</button>
+        </p>
+      </div>
 
       <!-- ADD PRODUCTS -->
       <template v-if="users.length > 0">
         <div class="alert alert-success container mt-5">
-          <p>
-            Add Product:
-            <input v-on:keydown.enter.prevent type="text" v-model="newProduct" />
-            <input v-on:keydown.enter.prevent type="number" v-model="newPrice" /> €
-          </p>
+          Add Product:
+          <input v-on:keydown.enter.prevent type="text" v-model="newProduct" />
+          <input v-on:keydown.enter.prevent type="number" v-model="newPrice" />
+ €
           <ul>
-            <p>To Pay between</p>
+            <p>To Pay between:</p>
             <li v-for="(x,i) in users" :key="i">
               <input
                 v-model="topay"
@@ -39,11 +40,11 @@
               {{ x.name }}
               <button
                 v-on:click.prevent="removeUser(i)"
-                class="btn-danger"
+                class="alert-danger rounded"
               >🗑️</button>
             </li>
           </ul>
-          <button @click.prevent="addProduct" v-bind:disabled="!restrictBtn()">Add Product</button>
+          <button class="btn alert-primary" @click.prevent="addProduct" v-bind:disabled="!restrictBtn()">Add Product</button>
         </div>
       </template>
 
@@ -52,18 +53,32 @@
       </template>
 
       <template v-if="products.length > 0">
-        <div class="alert alert-secondary">
-          <h6>Product List:</h6>
-          <ul>
-            <li v-for="(x,i) in products" :key="i">
-              {{ x.name }} {{ x.price }} {{ x.toPayBetween }}
-              <button
-                v-on:click.prevent="removeProduct(i)"
-                class="btn-danger"
-              >🗑️</button>
-            </li>
-          </ul>
-        </div>
+        <table class="alert alert-secondary table-striped rounded showResults">
+          <thead class="alert-primary">
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>to Pay Between</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(x,i) in products" :key="i">
+              <td>{{ x.name }}</td>
+              <td>{{ x.price }}€</td>
+              <td>
+                <ul type="none">
+                  <li v-for=" (z,i) in x.toPayBetween" :key="i">{{ z }}</li>
+                </ul>
+              </td>
+              <td>
+                <button v-on:click.prevent="removeProduct(i)" class="alert-danger rounded">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        
       </template>
 
       <template v-if="products.length > 0">
@@ -77,8 +92,10 @@
           </ul>
         </div>
       </template>
-      <button class="btn btn-danger" @click.prevent="reset">RESET</button>
-      <input type="submit" value="Save" class="btn btn-primary" />
+      <div class>
+        <button class="btn btn-danger" @click.prevent="reset">RESET</button>
+        <input type="submit" value="SAVE" class="btn btn-primary floatingright" />
+      </div>
     </form>
   </div>
 </template>
@@ -148,6 +165,8 @@ export default {
       });
       this.getAmountEachUser();
       this.stringifyArrays();
+      this.newPrice = 0;
+      this.newProduct = "";
     },
     restrictBtn() {
       if (
@@ -215,7 +234,7 @@ export default {
 
       this.products.forEach(product => {
         amount = product.price / product.toPayBetween.length;
-        total += parseInt(product.price, 10);
+        total += parseFloat(product.price, 10);
 
         this.users.forEach(user => {
           if (product.toPayBetween.includes(user.name)) {
@@ -261,6 +280,7 @@ export default {
           .then(response => {
             if (response.data.status == "success") {
               this.$swal("Success", "Created Successfully", "success");
+              this.$router.push("/home");
             }
           })
           .catch(error => {
