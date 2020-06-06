@@ -52,9 +52,9 @@ export default {
     return {
       login: {
         email: "",
-        password: "",
-        user: {}
-      }
+        password: ""
+      },
+      user: {}
     };
   },
   methods: {
@@ -70,7 +70,11 @@ export default {
           this.$router.push("/home");
         }
       } catch (err) {
-        this.$swal("Error", "Incorrect Email or Password,  please check them again.", "error");
+        this.$swal(
+          "Error",
+          "Incorrect Email or Password,  please check them again.",
+          "error"
+        );
         console.log(err.response);
       }
     },
@@ -79,15 +83,14 @@ export default {
       let decoded = VueJwtDecode.decode(token);
       this.user = decoded;
     },
-    sendUserToFather(usu){
-      this.$emit('iscoming', usu);
-    },
-    },
-    created(){
-      localStorage.removeItem("jwt");
-      this.user = false;
-      this.sendUserToFather(this.user);
+    sendUserToFather(usu) {
+      this.$emit("iscoming", usu);
     }
+  },
+  created() {
+    localStorage.removeItem("jwt");
+    this.user = false;
+    this.sendUserToFather(this.user);
   }
-
+};
 </script>

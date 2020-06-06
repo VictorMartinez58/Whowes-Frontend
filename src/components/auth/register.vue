@@ -64,8 +64,8 @@ export default {
         name: "",
         email: "",
         password: "",
-        user: {}
-      }
+      },
+      user: {}
     };
   },
   methods: {
