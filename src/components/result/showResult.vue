@@ -32,14 +32,15 @@
           <ul class="px-5">
             <li v-for="(x,i) in usersArray" :key="i"><strong>{{ x.name }}:</strong> has to pay {{ x.amountToPay }} €</li>
           </ul>
-        </div>
-      </div>
-      <div class="floatingright">
+        </div> 
+        <div class="floatingrightextra">
         <router-link :to="{name: 'edit', params: { id: iid }}" class="btn btn-warning"> UPDATE </router-link>
         <button v-if="result.closed" class="btn bg-success" @click="setClosed(iid, false)">OPEN</button>
         <button v-else class="btn bg-success" @click="setClosed(iid, true)">CLOSE</button>
         <button class="btn bg-danger" @click="deleteResult(iid)">DELETE</button>
       </div>
+      </div>
+     
     </section>
   </div>
 </template>

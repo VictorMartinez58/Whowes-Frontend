@@ -99,10 +99,10 @@
             </ul>
           </div>
         </template>
-        <div class>
+        
           <button class="btn btn-danger" @click.prevent="reset">RESET</button>
-          <input type="submit" value="SAVE" class="btn btn-primary floatingright" />
-        </div>
+          <input type="submit" value="SAVE" class="btn btn-primary floatingrightextra" />
+        
       </form>
     </div>
   </div>

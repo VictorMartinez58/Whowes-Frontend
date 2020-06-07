@@ -139,6 +139,19 @@
     float: right;
 }
 
+.floatingrightextra {
+    margin-bottom: -3vh;
+    float: right;
+}
+
+h2 > input[type=text]{
+    width: 30vw;
+}
+
+input[type=text]{
+    width: 10vw;
+}
+
 input[type=number]{
     width: 9vw;
     text-align: right;
