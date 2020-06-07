@@ -54,6 +54,7 @@ import Slider from "../Slider";
 
 export default {
   name: "Register",
+  props: ["senduser"],
   components: {
     Slider
   },
@@ -62,8 +63,9 @@ export default {
       register: {
         name: "",
         email: "",
-        password: ""
-      }
+        password: "",
+      },
+      user: {}
     };
   },
   methods: {
@@ -87,7 +89,16 @@ export default {
           this.$swal("Error", error.data.err.message, "error");
         }
       }
+    },
+    sendUserToFather(usu) {
+      this.$emit("iscoming", usu);
     }
+  },
+
+  created() {
+    localStorage.removeItem("jwt");
+    this.user = false;
+    this.sendUserToFather(this.user);
   }
 };
 </script>

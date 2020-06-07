@@ -39,10 +39,12 @@
   </div>
 </template>
 <script>
+import VueJwtDecode from "vue-jwt-decode";
 import Slider from "../Slider";
 
 export default {
   name: "Login",
+  props: ["senduser"],
   components: {
     Slider
   },
@@ -51,7 +53,8 @@ export default {
       login: {
         email: "",
         password: ""
-      }
+      },
+      user: {}
     };
   },
   methods: {
@@ -62,13 +65,32 @@ export default {
         localStorage.setItem("jwt", token);
         if (token) {
           this.$swal("Success", "Login Successful", "success");
+          this.getUserDetails();
+          this.sendUserToFather(this.user);
           this.$router.push("/home");
         }
       } catch (err) {
-        this.$swal("Error", "Incorrect Email or Password,  please check them again.", "error");
+        this.$swal(
+          "Error",
+          "Incorrect Email or Password,  please check them again.",
+          "error"
+        );
         console.log(err.response);
       }
     },
+    getUserDetails() {
+      let token = localStorage.getItem("jwt");
+      let decoded = VueJwtDecode.decode(token);
+      this.user = decoded;
+    },
+    sendUserToFather(usu) {
+      this.$emit("iscoming", usu);
+    }
+  },
+  created() {
+    localStorage.removeItem("jwt");
+    this.user = false;
+    this.sendUserToFather(this.user);
   }
 };
 </script>

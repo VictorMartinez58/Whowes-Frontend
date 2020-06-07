@@ -1,75 +1,82 @@
 <template>
   <div>
-      <Slider text="Home" />
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <Slider text="Home" />
+
+    <section v-if="results.length > 0 ">
+      <router-link to="/results-create">
+        <button class="btn btn-primary floatingright mt-5">Add NEW</button>
+      </router-link>
+
+      <div class="clearfix"></div>
+
       <div class="container">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-            </li>
-          </ul>
-        </div>
+        <ul type="none" class="home">
+          <h3 class="adapt">My bills:</h3>
+
+          <li
+            v-for="(x,i) in results"
+            :key="i"
+            class="border border-primary rounded p-3 m-3 text-center"
+            :class="{
+              'alert-danger': x.closed == true,
+              'alert-success': x.closed != true,
+            }"
+          >
+            <router-link :to="{name: 'show', params: { id: x._id }}">
+              <div>
+                <h6>{{ x.title }}</h6>
+              </div>
+            </router-link>
+          </li>
+        </ul>
       </div>
-    </nav>
-    <section>
+    </section>
+
+    <section v-else>
       <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-12">
-            <ul class="list-group">
-              <li class="list-group-item">Name : {{ user.name }}</li>
-              <li class="list-group-item">Email : {{ user.email }}</li>
-            </ul>
-          </div>
-        </div>
+      <h3 class="adapt">You don't have any Bill yet.</h3>
+      <router-link to="/results-create">
+        <h5 class="ml-5">Create your first right now</h5>
+      </router-link>
       </div>
     </section>
   </div>
 </template>
 
 <script>
-import VueJwtDecode from "vue-jwt-decode";
+import axios from "axios";
+import Global from "../Global";
+
 import Slider from "./Slider";
 
 export default {
   name: "Home",
-  props: ["senduser"],
+  props: ["user"],
+
   components: {
-      Slider
+    Slider
   },
   data() {
     return {
-      user: {}
+      url: Global.url,
+      results: []
     };
   },
   methods: {
-    getUserDetails() {
-      let token = localStorage.getItem("jwt");
-      let decoded = VueJwtDecode.decode(token);
-      this.user = decoded;
-    },
-    logUserOut() {
-      localStorage.removeItem("jwt");
-    },
-    sendUserToFather(usu){
-      this.$emit('iscoming', usu);
-    },
+    getResults() {
+      axios
+        .get(this.url + "result/results-user/" + this.user._id, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("jwt") }
+        })
+        .then(res => {
+          if (res.data.status == "success") {
+            this.results = res.data.results;
+          }
+        });
+    }
   },
-  created() {
-    this.getUserDetails();
-    this.sendUserToFather(this.user);
+  mounted() {
+    this.getResults();
   }
 };
 </script>
-<style scoped></style>
