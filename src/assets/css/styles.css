@@ -141,6 +141,7 @@
 
 input[type=number]{
     width: 9vw;
+    text-align: right;
 }
 
 #footer{

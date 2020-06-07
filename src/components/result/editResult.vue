@@ -1,12 +1,12 @@
 <template>
   <div>
-    <Slider text="Create" />
+    <Slider text="Edit" />
     <div class="container mt-3">
-      <router-link to="/home" class="btn btn-primary">🠘</router-link>
+      <router-link :to="'/results-show/'+iid" class="btn btn-primary">🠘</router-link>
 
       <form
         class="container mt-3 mb-5 form-group alert-dark border border-primary p-1 rounded"
-        v-on:submit.prevent="save()"
+        v-on:submit.prevent="save(iid)"
       >
         <h2>
           Set Title:
@@ -115,11 +115,11 @@ import Global from "../../Global";
 import Result from "../../models/Result";
 
 export default {
-  name: "Create",
+  name: "Edit",
   components: {
     Slider
   },
-  props: ["user"],
+  props: ["user", "id"],
   data() {
     return {
       resultToSave: new Result("", "", "", [], []),
@@ -138,7 +138,7 @@ export default {
       topay: [],
       submitted: false,
       ableToSave: false,
-      firstTime: true
+      iid: this.$route.params.id
     };
   },
   methods: {
@@ -272,7 +272,7 @@ export default {
         this.usersStringified.push(JSON.stringify(x));
       });
     },
-    save() {
+    save(id) {
       if (this.ableToSave) {
         this.getAmountEachUser();
 
@@ -282,7 +282,7 @@ export default {
         this.resultToSave.users = this.usersStringified;
 
         axios
-          .post(this.url + "result/save", this.resultToSave, {
+          .put(this.url + "result/result-update/" + id, this.resultToSave, {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("jwt")
             }
@@ -290,18 +290,43 @@ export default {
           .then(response => {
             if (response.data.status == "success") {
               this.$swal("Success", "Created Successfully", "success");
-              this.$router.push("/home");
+              this.$router.push("/results-show/" + id);
             }
           })
           .catch(error => {
-            this.$swal("Error", "Something went wrong", error);
+            this.$swal("Error", "Something went wrong" + error, "error");
           });
       } else {
         this.$swal("Error", "Need at least one product to save", "error");
       }
+    },
+    getResult(id) {
+      axios
+        .get(this.url + "result/result/" + id, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("jwt") }
+        })
+        .then(res => {
+          if (res.data.status == "success") {
+            this.result = res.data.result;
+            this.resultToSave.title = res.data.result.title;
+
+            this.result.products.forEach(x => {
+              this.products.push(JSON.parse(x));
+            });
+
+            this.result.users.forEach(x => {
+              this.users.push(JSON.parse(x));
+            });
+
+            this.ableToSave = true;
+            this.stringifyArrays();
+          }
+        });
     }
   },
   computed: {},
-  mounted() {}
+  mounted() {
+    this.getResult(this.iid);
+  }
 };
 </script>

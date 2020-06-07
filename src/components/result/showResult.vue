@@ -30,11 +30,12 @@
         <div class="alert alert-primary">
           <h6>Total Price: {{ result.totalPrice }} €</h6>
           <ul class="px-5">
-            <li v-for="(x,i) in usersArray" :key="i">{{ x.name }} {{ x.amountToPay }} €</li>
+            <li v-for="(x,i) in usersArray" :key="i"><strong>{{ x.name }}:</strong> has to pay {{ x.amountToPay }} €</li>
           </ul>
         </div>
       </div>
       <div class="floatingright">
+        <router-link :to="{name: 'edit', params: { id: iid }}" class="btn btn-warning"> UPDATE </router-link>
         <button v-if="result.closed" class="btn bg-success" @click="setClosed(iid, false)">OPEN</button>
         <button v-else class="btn bg-success" @click="setClosed(iid, true)">CLOSE</button>
         <button class="btn bg-danger" @click="deleteResult(iid)">DELETE</button>
@@ -122,7 +123,7 @@ export default {
 
       axios
         .put(
-          this.url + "result/result-close/" + id,
+          this.url + "result/result-update/" + id,
           { closed: close },
           {
             headers: {

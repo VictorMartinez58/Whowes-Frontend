@@ -7,6 +7,7 @@ import Register from '../components/auth/register.vue';
 import Home from '../components/Home.vue';
 import showResults from '../components/result/showResult.vue';
 import createResult from '../components/result/createResult.vue';
+import editResult from '../components/result/editResult.vue';
 import UserDetails from '../components/user/UserDetails.vue';
 import ErrorComponent from '../components/ErrorComponent.vue';
 
@@ -29,6 +30,9 @@ const routes = [
       requiresAuth: true
     }},
     {path: '/results-create', component: createResult,  meta: {
+      requiresAuth: true
+    }},
+    {path: '/results-edit/:id', name: "edit", component: editResult,  meta: {
       requiresAuth: true
     }},
     {path: '/results-show/:id', name:'show', component: showResults,  meta: {
