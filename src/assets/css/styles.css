@@ -144,11 +144,11 @@
     float: right;
 }
 
-h2 > input[type=text]{
+h2 > input[type=text].container{
     width: 30vw;
 }
 
-input[type=text]{
+input[type=text].container{
     width: 10vw;
 }
 

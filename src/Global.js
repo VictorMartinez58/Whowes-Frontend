@@ -1,5 +1,5 @@
 export var Global = {
-    url: "http://localhost:5858/"
+    url: "https://whowes-api.herokuapp.com/"
 };
 
 export default Global;
