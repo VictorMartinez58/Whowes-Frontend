@@ -41,6 +41,7 @@
 <script>
 import VueJwtDecode from "vue-jwt-decode";
 import Slider from "../Slider";
+import Global from "../../Global";
 
 export default {
   name: "Login",
@@ -54,13 +55,14 @@ export default {
         email: "",
         password: ""
       },
-      user: {}
+      user: {},
+      url: Global.url,
     };
   },
   methods: {
     async loginUser() {
       try {
-        let response = await this.$http.post("/user/login", this.login);
+        let response = await this.$http.post(this.url+"user/login", this.login);
         let token = response.data.token;
         localStorage.setItem("jwt", token);
         if (token) {

@@ -51,6 +51,8 @@
 
 <script>
 import Slider from "../Slider";
+import Global from "../../Global";
+
 
 export default {
   name: "Register",
@@ -65,13 +67,14 @@ export default {
         email: "",
         password: "",
       },
-      user: {}
+      user: {},
+      url: Global.url,
     };
   },
   methods: {
     async registerUser() {
       try {
-        let response = await this.$http.post("/user/register", this.register);
+        let response = await this.$http.post(this.url+"user/register", this.register);
         console.log(response);
         let token = response.data.token;
         if (token) {
